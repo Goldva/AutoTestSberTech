@@ -1,13 +1,12 @@
-import Elements.YandexMarket;
+import Elements.LaptopPage;
+import Elements.MarketPage;
+import Elements.YandexPage;
 import Elements.interfaces.ClickOnPage;
-import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import util.DriverFactory;
 
 
 public class TestYandex {
@@ -15,16 +14,9 @@ public class TestYandex {
 
     @BeforeClass
     public static void beforeClass(){
-//        ChromeDriverManager.getInstance().setup();
-//        driver = new ChromeDriver();
-        InternetExplorerDriverManager.getInstance().setup();
-        DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
-        ieCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,
-                true);
-
-        ieCapabilities.setVersion("9");
-        driver = new InternetExplorerDriver(ieCapabilities);
-
+        driver = DriverFactory.getDriver("chrome");
+        driver.manage().window().maximize();
+        driver.get("http://www.yandex.ru");
     }
 
     @AfterClass
@@ -32,22 +24,31 @@ public class TestYandex {
         driver.close();
     }
 
-    @DataProvider
-    private Object[][] pageObjects() {
-        return new Object[][]{
-                {new YandexMarket()}
-        };
+    @Test
+    public void testSearch() {
+        ClickOnPage clickOnPage = new YandexPage();
+        clickOnPage.init(driver);
+        clickOnPage.click();
+        clickOnPage = new MarketPage();
+        clickOnPage.init(driver);
+        clickOnPage.click();
+        LaptopPage laptopPage = new LaptopPage();
+        laptopPage.init(driver);
+        laptopPage.sendKey("111111");
     }
 
-
-    @Test(dataProvider = "pageObjects")
-    public void testSearch(final ClickOnPage searchPage) {
-        driver.navigate().to("http://www.yandex.ru");
-//        driver.get("http://www.yandex.ru");
-        driver.manage().window().maximize();
-
-        searchPage.init(driver);
-        searchPage.click();
-    }
+//    @DataProvider
+//    private Object[][] pageObjects() {
+//        return new Object[][]{
+//                {new YandexPage()},
+//                {new MarketPage()}
+//        };
+//    }
+//
+//    @Test(dataProvider = "pageObjects")
+//    public void testSearch(final ClickOnPage searchPage) {
+//        searchPage.init(driver);
+//        searchPage.click();
+//    }
 
 }
