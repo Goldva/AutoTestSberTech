@@ -1,12 +1,13 @@
 import Elements.LaptopPage;
 import Elements.MarketPage;
 import Elements.YandexPage;
-import Elements.interfaces.ClickOnPage;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import util.DriverFactory;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class TestYandex {
@@ -15,6 +16,9 @@ public class TestYandex {
     @BeforeClass
     public static void beforeClass(){
         driver = DriverFactory.getDriver("chrome");
+        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
+
         driver.manage().window().maximize();
         driver.get("http://www.yandex.ru");
     }
@@ -26,15 +30,17 @@ public class TestYandex {
 
     @Test
     public void testSearch() {
-        ClickOnPage clickOnPage = new YandexPage();
-        clickOnPage.init(driver);
-        clickOnPage.click();
-        clickOnPage = new MarketPage();
-        clickOnPage.init(driver);
-        clickOnPage.click();
-        LaptopPage laptopPage = new LaptopPage();
-        laptopPage.init(driver);
-        laptopPage.sendKey("111111");
+        YandexPage yandexPage = new YandexPage(driver);
+        yandexPage.clickOnMarket();
+        MarketPage marketPage = new MarketPage(driver);
+        marketPage.moveToComputer();
+        marketPage.clickToLaptop();
+        LaptopPage laptopPage = new LaptopPage(driver);
+        laptopPage.sendKeyPriceFrom("20000");
+        laptopPage.sendKeyPriceTo("25000");
+        laptopPage.clickCheckBoxAcer();
+        laptopPage.clickApply(driver);
+        laptopPage.getNameProductFromList(1);
     }
 
 //    @DataProvider
@@ -48,7 +54,7 @@ public class TestYandex {
 //    @Test(dataProvider = "pageObjects")
 //    public void testSearch(final ClickOnPage searchPage) {
 //        searchPage.init(driver);
-//        searchPage.click();
+//        searchPage.clickOnMarket();
 //    }
 
 }
