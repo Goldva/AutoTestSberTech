@@ -18,6 +18,10 @@ public class LaptopPage extends Page{
     private WebElement priceTo;
     @FindBy(id = "glf-7893318-267101")
     private WebElement checkAcer;
+    @FindBy(id = "header-search")
+    private WebElement headerSearch;
+    @FindBy(className = "search2__button")
+    private WebElement buttonSearch;
     @FindBy(xpath = "/html/body/div[1]/div[4]/div[2]/div[2]/div[1]/div/div[31]/div[1]/button")
     private WebElement buttonApply;
     @FindBys({@FindBy(className = "snippet-card__header-text")})
@@ -43,21 +47,42 @@ public class LaptopPage extends Page{
         action.perform();
     }
 
+    public void sendKeyHeaderSearch(String text) {
+        action.moveToElement(headerSearch);
+        action.click();
+        action.sendKeys(text);
+        action.perform();
+    }
+
     public void clickCheckBoxAcer(){
         action.click(checkAcer);
         action.perform();
     }
 
-    public void clickApply(WebDriver driver){
+    public void clickApply(){
         int y = buttonApply.getLocation().getY();
-        ((JavascriptExecutor)driver).executeScript("window.scrollBy(0,"+y+");");
+        scrollPage(y);
         action.click(buttonApply);
         action.perform();
-        wait.until(ExpectedConditions.invisibilityOf(listProducts.get(0)));
+        wait.until(ExpectedConditions.invisibilityOfAllElements(listProducts));
+    }
+
+    public void clickButtonSearch() {
+        int y = buttonSearch.getLocation().getY();
+        scrollPage(y);
+        action.click(buttonSearch);
+        action.perform();
+        wait.until(ExpectedConditions.invisibilityOfAllElements(listProducts));
     }
 
     public String getNameProductFromList(int indexProduct){
-        String result = listProducts.get(indexProduct).getText();
-        return result;
+        wait.until(ExpectedConditions.visibilityOfAllElements(listProducts));
+        return listProducts.get(indexProduct).getText();
     }
+
+    private void scrollPage(int y){
+        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 0);");
+        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0," + y + ");");
+    }
+
 }
