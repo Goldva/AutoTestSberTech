@@ -7,15 +7,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import ru.yandex.qatools.allure.annotations.Title;
 import util.DriverFactory;
 
 import java.util.concurrent.TimeUnit;
 
-//import org.testng.annotations.AfterClass;
-//import org.testng.annotations.BeforeClass;
-//import org.testng.annotations.Test;
-
-
+@Title("Test yandex market")
 public class TestYandex {
     private static WebDriver driver;
 
@@ -29,6 +26,7 @@ public class TestYandex {
         driver.get("http://www.yandex.ru");
     }
 
+    @Title("Search and equals product")
     @AfterClass
     public static void afterClass(){
         driver.close();
