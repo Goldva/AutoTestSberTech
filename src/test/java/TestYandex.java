@@ -2,14 +2,18 @@ import Elements.LaptopPage;
 import Elements.MarketPage;
 import Elements.ProductPage;
 import Elements.YandexPage;
+import org.junit.AfterClass;
 import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
 import util.DriverFactory;
 
 import java.util.concurrent.TimeUnit;
+
+//import org.testng.annotations.AfterClass;
+//import org.testng.annotations.BeforeClass;
+//import org.testng.annotations.Test;
 
 
 public class TestYandex {
